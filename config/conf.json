@@ -1,0 +1,46 @@
+{
+    "site": [
+        {
+            "nom": "Site1",
+            "salles": [
+                {
+                    "nom": "Salle1",
+                    "hosts": [
+                        {
+                            "nom": "SW01",
+                            "ip": "192.168.1.1",
+                            "devices": [
+                                {
+                                    "nom": "AP01",
+                                    "couverture": "Salle du 1er et couloir",
+                                    "port": "Gi0/1"
+                                }
+                            ]
+                        },
+                        {
+                            "nom": "SW02",
+                            "ip": "192.168.1.2",
+                            "devices": [
+                                {
+                                    "nom": "AP02",
+                                    "couverture": "Hall d'entrée et blablablza",
+                                    "port": "Gi0/1"
+                                }, 
+                                {
+                                    "nom": "AP03",
+                                    "couverture": "Cave et Gymnase",
+                                    "port": "Gi0/2"
+                                },
+                                {
+                                    "nom": "AP04",
+                                    "couverture": "3eme étage",
+                                    "port": "Gi0/3"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

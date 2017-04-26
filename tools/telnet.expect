@@ -1,0 +1,96 @@
+#!/usr/bin/expect
+#Usage telnet.expect <host> <ssh user> <ssh password> <up|down|status>
+set timeout 25
+set command [lindex $argv 4]
+set enablepasswd [lindex $argv 3]
+set passwd [lindex $argv 2]
+set login [lindex $argv 1]
+set host [lindex $argv 0]
+
+# Get the commands to run, one per line
+set path [file dirname $argv0]
+set filepath "$path/interface.txt"
+set f [open $filepath]
+set interfaces [split [read $f] "\n"]
+set prompt "*#"
+close $f
+
+proc shutdown {prompt port} {
+    send_user "\n"
+    send_user ">>>>> Shutdown Port <<<<<\n"
+    send_user "\n"
+    #puts "terminal length 0\n"
+    send "conf t\n"
+    expect $prompt
+    send "interface $port\n"
+    expect $prompt
+    send "shut\n"
+    expect $prompt
+    send "\x1A\n"
+    expect $prompt
+}
+
+proc no_shutdown {prompt port} {
+    send_user "\n"
+    send_user ">>>>> No Shutdown Port <<<<<\n"
+    send_user "\n"
+    #puts "terminal length 0\n"
+    send "conf t\n"
+    expect $prompt
+    send "interface $port\n"
+    expect $prompt
+    send "no shut\n"
+    expect $prompt
+    send "\x1A\n"
+    expect $prompt
+}
+
+proc status {prompt port} {
+    send_user "\n"
+    send_user ">>>>> Status <<<<<\n"
+    send_user "\n"
+    send "show int status | inc $port \n"
+    expect $prompt
+}
+
+
+proc auth {login prompt passwd enablepasswd} {
+    expect {
+        "Username:" {
+            send "$login\n"
+            exp_continue
+        }
+        "*>" {
+            send "enable\n"
+            expect "*?assword"
+            send "$enablepasswd\n"
+            exp_continue
+        }
+        "*?assword" {
+            send "$passwd\n"
+            exp_continue
+        }
+        $prompt {
+            send_user "Auth OK\n"
+        }
+    }
+}
+
+spawn telnet $host
+auth $login $prompt $passwd $enablepasswd
+# Iterate over the commands
+foreach port $interfaces {
+    if {$command == "UP"} {
+        no_shutdown $prompt $port
+        status $prompt $port
+    }
+    if {$command == "DOWN"} {
+        shutdown $prompt $port
+        status $prompt $port
+    }
+    if {$command == "status"} {
+        status $prompt $port
+    }
+}
+send "exit\n"
+expect eof
