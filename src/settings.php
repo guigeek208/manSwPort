@@ -9,7 +9,7 @@ if (isset($_POST)) {
 	if (isset($_POST["webpassword"]) and isset($_POST["webconfirmpassword"])) {
 		if ($_POST["webpassword"] == $_POST["webconfirmpassword"]) {
 			if ($_POST["webpassword"] != "") {
-				$manSwPort->set_webpassword("admin");
+				$manSwPort->set_webpassword($_POST["webpassword"]);
 			} else {
 				echo '<div class="card-panel red white-text">Le mot de passe ne peut pas être vide !</div>';
 			}
