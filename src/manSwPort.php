@@ -55,14 +55,16 @@ class manSwPort
 
 	public function parse_results($devices, $output) {
 		$arr = array();
+		//print_r($output);
 		foreach ($devices as $device) {
-			$portslash = addcslashes($device["port"], "/");
+			$portslash = addcslashes($device["portname"], "/");
 			$lines = explode("\n", $output);
 			$boolfound = false;
 			foreach ($lines as $line) {
 				if ($boolfound) {
 					$boolfound = false;
-					if (preg_match("/".$portslash."\s+(\w+)\s+/", trim($line), $matches)) {
+					if (preg_match("/".$portslash."\s+is\s+\w+\s*\w+,\s*\w+\s+\w+\s+\w+\s+\w+\s+\((\w+)\)/", trim($line), $matches)) {
+					//if (preg_match("/".$portslash."\s+(\w+)\s+/", trim($line), $matches)) {
 						if ($matches[1] == "disabled") {
 							$arr[$device["port"]] = 0;
 						} else {
@@ -70,7 +72,7 @@ class manSwPort
 						}
 					}
 				}
-				if (preg_match("/show int status \| inc ".$portslash."/", $line, $matches)) {
+				if (preg_match("/show int \| inc ".$portslash."/", $line, $matches)) {
 					$boolfound = true;
 				} else {
 					$boolfound = false;
@@ -89,7 +91,7 @@ class manSwPort
 				foreach ($salle["hosts"] as $host) {
 					$fileport = fopen("../tools/interface.txt", "w");
 					foreach ($host["devices"] as $device) {
-						fwrite($fileport, $device["port"]."\n");
+						fwrite($fileport, $device["portname"]."\n");
 					}
 					fclose($fileport);
 					$output = $this->launch_cmd($host["ip"], "status");

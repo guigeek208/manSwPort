@@ -49,7 +49,7 @@ proc status {prompt port} {
     send_user "\n"
     send_user ">>>>> Status <<<<<\n"
     send_user "\n"
-    send "show int status | inc $port \n"
+    send "show int | inc $port \n"
     expect $prompt
 }
 
