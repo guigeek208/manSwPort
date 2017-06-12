@@ -24,7 +24,7 @@ foreach($infos["site"] as $site) {
 		foreach ($salle["hosts"] as $host) {
 			foreach($host["devices"] as $device) {
 				echo '<tr>';
-				echo '<td><input name="checkbox" id="'.$host["ip"].'_'.$device["port"].'" type="checkbox"><label for="'.$host["ip"].'_'.$device["port"].'"</td>';
+				echo '<td><input name="checkbox" id="'.$host["ip"].'_'.$device["portname"].'" type="checkbox"><label for="'.$host["ip"].'_'.$device["portname"].'"</td>';
 				echo '<td>'.$device["nom"].'</td>';
 				echo '<td>'.$device["couverture"].'</td>';
 				echo '<td>'.$host["ip"].'</td>';

@@ -85,6 +85,7 @@ class manSwPort
 	public function status() {
 		$results = array();
 		$output = "";
+		$i=0;
 		$infos = $this->_configjson;
 		foreach($infos["site"] as $site) {
 			foreach ($site["salles"] as $salle) {
@@ -95,8 +96,10 @@ class manSwPort
 					}
 					fclose($fileport);
 					$output = $this->launch_cmd($host["ip"], "status");
-					$arr = $this->parse_results($host["devices"], $output);		
-					$results[$host["ip"]] = $arr;
+					$arr = $this->parse_results($host["devices"], $output);
+					//$results[$host["ip"]] = $arr;
+					$results[$i][$host["ip"]] = $arr;
+					$i++;
 				}
 			}
 		}
